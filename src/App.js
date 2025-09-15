@@ -1,22 +1,26 @@
-import logo from './logo.svg';
+import React, { useEffect, useState } from "react";
 import './App.css';
 
 function App() {
+  const [backendMessage, setBackendMessage] = useState("");
+
+  useEffect(() => {
+    fetch("/api/hello")
+      .then((res) => res.json())
+      .then((data) => setBackendMessage(data.message))
+      .catch((err) => console.error("Error fetching:", err));
+  }, []);
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h1>Frontend Hello</h1>
+        <p>Backend says: {backendMessage}</p>
+        <div>
+          <h1>Displaying an image from public folder</h1>
+          <img src="/logo2.png" alt="Example" width="300" />
+        </div>
+
       </header>
     </div>
   );
