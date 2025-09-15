@@ -1,0 +1,31 @@
+/* src/components/Header.css */
+.blockbusterparody-header {
+    background-color: #003399;
+    color: rgb(226, 190, 45);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0rem 3rem;
+    font-family: "Arial Black", Impact, sans-serif;
+    letter-spacing: 1px;
+    box-shadow: 0 10px 100px rgba(0, 0, 0, 0.3);
+    border-bottom: 4px solid #ffcc00;
+
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+
+.nav-links a {
+    margin-left: 5rem;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: rgb(255, 211, 38);
+    transition: color 0.2s ease-in-out;
+}
+
+.nav-links a:hover {
+    color: white;
+}

@@ -1,27 +1,31 @@
-import React, { useEffect, useState } from "react";
 import './App.css';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Header from "./components/Header";
+import Home from "./pages/Home";
+import Films from "./pages/Films";
+import Customer from "./pages/Customer";
+import About from "./pages/About";
 
 function App() {
-  const [backendMessage, setBackendMessage] = useState("");
-
-  useEffect(() => {
-    fetch("/api/hello")
-      .then((res) => res.json())
-      .then((data) => setBackendMessage(data.message))
-      .catch((err) => console.error("Error fetching:", err));
-  }, []);
-
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>Frontend Hello</h1>
-        <p>Backend says: {backendMessage}</p>
-        <div>
-          <h1>Displaying an image from public folder</h1>
-          <img src="/logo2.png" alt="Example" width="300" />
-        </div>
 
-      </header>
+      <main >
+        <Router>
+          <Header />
+          <main>
+            <header className="App-header">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/films" element={<Films />} />
+                <Route path="/customer" element={<Customer />} />
+                <Route path="/about" element={<About />} />
+              </Routes>
+            </header>
+          </main>
+        </Router>
+
+      </main>
     </div>
   );
 }
