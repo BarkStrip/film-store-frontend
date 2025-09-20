@@ -1,7 +1,6 @@
-import { useState } from "react";
-import ViewDetailsButton from "./ViewDetailsButton"
+import FilmDetailsButton from "./FilmDetailsButton"
 
-export default function Top5Items({ data }) {
+export default function Top5Films({ data }) {
 
     return (
         <div className="item-grid">
@@ -12,7 +11,7 @@ export default function Top5Items({ data }) {
                         <h3 className="item-title">{film.title}</h3>
                         <p1 className="ranking">{index + 1}</p1 >
                         <div>
-                            <ViewDetailsButton film={film} />
+                            <FilmDetailsButton film={film} />
                         </div>
 
                     </div>
