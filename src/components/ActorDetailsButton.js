@@ -32,8 +32,8 @@ export default function ActorDetailsButton({ actor }) {
             </button >
 
             {isOpen && (
-                <div className="description-text-overlay">
-                    <div className="description-background-overlay">
+                <div className="outer-overlay">
+                    <div className="inner-overlay">
 
                         <h2>{actor.first_name} {actor.last_name}</h2>
                         <p><strong>Details: </strong> </p>

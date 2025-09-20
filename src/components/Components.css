@@ -100,20 +100,8 @@
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    /* Changed from center */
     z-index: 1000;
-    overflow-y: auto;
-    /* Add scrolling */
     padding: 2rem 0;
-    /* Add some padding top/bottom */
-    word-wrap: break-word;
-    /* Break long words */
-    overflow-wrap: break-word;
-    /* Modern alternative to word-wrap */
-    white-space: normal;
-    /* Allow text to wrap normally */
-    hyphens: auto;
-    /* Add hyphens for better breaking */
 }
 
 .inner-overlay {
@@ -126,9 +114,7 @@
     width: 90%;
     font-size: 20px;
     max-height: 80vh;
-    /* Limit height to 80% of viewport */
     overflow-y: auto;
-    /* Add vertical scrolling */
 
 }
 
@@ -145,7 +131,23 @@
 
 .close-button:hover {
     background-color: #c82333;
-    /* slightly darker red on hover */
+}
+
+.rent-button {
+    margin-top: 1rem;
+    margin-left: 5rem;
+    align-self: first baseline;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    background-color: #ffdb4c;
+    color: white;
+    transition: background-color 0.2s ease;
+}
+
+.rent-button:hover {
+    background-color: #ffd21f;
 }
 
 .search-bar {
@@ -183,7 +185,6 @@
 
 .results-table {
     table-layout: fixed;
-    /* This makes the table respect column widths */
     width: 100%;
 }
 
@@ -192,14 +193,11 @@
     padding: 0.1rem 1rem;
     border-bottom: 0.1px solid #ffffff;
     text-align: left;
-
-    /* Prevent text overflow and keep single line */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-/*  title column */
 .results-table th:nth-child(1),
 .results-table td:nth-child(1) {
     width: 1%;
@@ -208,17 +206,17 @@
 
 .results-table th:nth-child(2),
 .results-table td:nth-child(2) {
-    width: 10%;
+    width: 8%;
 }
 
 .results-table th:nth-child(3),
 .results-table td:nth-child(3) {
-    width: 20%;
+    width: 10%;
 }
 
 .results-table th:nth-child(4),
 .results-table td:nth-child(4) {
-    width: 2%;
+    width: 1%;
 }
 
 .results-table th:nth-child(5),

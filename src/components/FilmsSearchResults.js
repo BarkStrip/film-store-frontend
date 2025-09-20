@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import FilmDetailsButton from "./FilmDetailsButton";
 
-export default function SearchResults({ data }) {
+export default function FilmsSearchResults({ data }) {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 50;
 
@@ -14,18 +14,15 @@ export default function SearchResults({ data }) {
         setCurrentPage(1);
     }, [data]);
 
-    if (data.length === 0) {
-        return (
-            <div className="search-results">
-                <div className="loading">Loading . . .</div>
-            </div>
-        );
-    }
-
     return (
         <div className="search-results">
             <div style={{ textAlign: "left", paddingLeft: '20px' }}>
-                Diplaying {startIndex + 1} - {startIndex + currentData.length} of {data.length}
+                {data.length ? (
+                    <p>  Diplaying {startIndex + 1} - {startIndex + currentData.length} of {data.length} results </p>
+                ) : (
+                    <p> No results </p>
+                )}
+
             </div>
             <table className="results-table">
                 <thead>
