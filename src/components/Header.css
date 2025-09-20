@@ -1,4 +1,5 @@
-/* src/components/Header.css */
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
 .blockbusterparody-header {
     background-color: #003399;
     color: rgb(226, 190, 45);
@@ -6,8 +7,9 @@
     justify-content: space-between;
     align-items: center;
     padding: 0rem 3rem;
-    font-family: "Arial Black", Impact, sans-serif;
-    letter-spacing: 1px;
+    font-size: 1.7rem;
+    font-family: "Anton", Impact, sans-serif;
+    letter-spacing: 3px;
     box-shadow: 0 10px 100px rgba(0, 0, 0, 0.3);
     border-bottom: 4px solid #ffcc00;
 
@@ -18,9 +20,11 @@
 
 
 .nav-links a {
-    margin-left: 5rem;
+    margin-left: 3rem;
     text-decoration: none;
+    font-family: "Arial Black", Impact, sans-serif;
     font-weight: bold;
+    letter-spacing: .1px;
     font-size: 1.5rem;
     color: rgb(255, 211, 38);
     transition: color 0.2s ease-in-out;

@@ -6,7 +6,7 @@ import "./Header.css";
 function Header() {
     return (
         <header className="blockbusterparody-header">
-            <img src="/logo2.png" width="200" />
+            <h1> SAKILABUSTER </h1>
             <nav className="nav-links">
                 <Link to="/">Home</Link>
                 <Link to="/films">Films</Link>
