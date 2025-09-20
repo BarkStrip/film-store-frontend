@@ -36,10 +36,10 @@ function Home() {
     }, []);
     return (
         <div>
-            <p className="top-item-title">Top 5 Films: </p>
+            <p className="top-item-title">Top 5 Films </p>
             <Top5Films data={films} />
 
-            <p className="top-item-title">Top 5 Actors: </p>
+            <p className="top-item-title">Top 5 Actors </p>
             <Top5Actors data={actors} />
         </div >
 

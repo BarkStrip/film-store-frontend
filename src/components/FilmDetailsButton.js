@@ -14,10 +14,10 @@ export default function FilmDetailsButton({ film }) {
             </button >
 
             {isOpen && (
-                <div className="description-text-overlay">
-                    <div className="description-background-overlay">
+                <div className="outer-overlay">
+                    <div className="inner-overlay">
                         <h3>{film.title}</h3>
-                        <div style={{ textAlign: "left" }}>
+                        <div>
                             <p><strong>Description:</strong> {film.description}</p>
                             <p><strong>Rating: </strong>{film.rating}</p>
                             <p><strong>Release Year: </strong>{film.release_year}</p>

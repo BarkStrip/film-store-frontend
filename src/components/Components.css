@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
 
+
 .blockbusterparody-header {
     background-color: #003399;
     color: rgb(226, 190, 45);
@@ -18,7 +19,6 @@
     z-index: 100;
 }
 
-
 .nav-links a {
     margin-left: 3rem;
     text-decoration: none;
@@ -32,6 +32,46 @@
 
 .nav-links a:hover {
     color: white;
+}
+
+
+.item-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    /* 5 side by side */
+    gap: 10px;
+    /* space between boxes */
+    padding: 20px;
+}
+
+.item-card {
+    background: rgb(226, 190, 45);
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 1px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgb(255, 255, 255);
+}
+
+.ranking {
+    color: #003399;
+    display: center;
+    text-align: center;
+    font-size: 3rem;
+    padding: 0rem;
+    font-family: Impact, sans-serif;
+}
+
+.item-title {
+    color: #003399;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem 1rem;
+    font-size: 2rem;
+    font-family: Impact, sans-serif;
+    min-height: 12vh;
+    box-shadow: 0 10px 20px #ffffff;
 }
 
 .view-details-button {
@@ -49,7 +89,8 @@
     color: #5a4700;
 }
 
-.description-text-overlay {
+
+.outer-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -58,11 +99,25 @@
     background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
+    /* Changed from center */
     z-index: 1000;
+    overflow-y: auto;
+    /* Add scrolling */
+    padding: 2rem 0;
+    /* Add some padding top/bottom */
+    word-wrap: break-word;
+    /* Break long words */
+    overflow-wrap: break-word;
+    /* Modern alternative to word-wrap */
+    white-space: normal;
+    /* Allow text to wrap normally */
+    hyphens: auto;
+    /* Add hyphens for better breaking */
 }
 
-.description-background-overlay {
+.inner-overlay {
+
     background-color: white;
     padding: 2rem;
     color: black;
@@ -70,6 +125,11 @@
     max-width: 500px;
     width: 90%;
     font-size: 20px;
+    max-height: 80vh;
+    /* Limit height to 80% of viewport */
+    overflow-y: auto;
+    /* Add vertical scrolling */
+
 }
 
 .close-button {
@@ -86,4 +146,127 @@
 .close-button:hover {
     background-color: #c82333;
     /* slightly darker red on hover */
+}
+
+.search-bar {
+    color: rgb(226, 190, 45);
+    display: flex;
+    width: 90%;
+    border: none;
+    padding: 0rem 2rem;
+    font-size: 2rem;
+    font-family: Impact, sans-serif;
+}
+
+.dropdown {
+    color: rgb(226, 190, 45);
+    background-color: #282c34;
+    display: flex;
+    padding-left: .5rem;
+    font-size: 2rem;
+    font-family: Impact, sans-serif;
+}
+
+.textbox {
+    color: rgb(255, 253, 246);
+    font-size: 1.75rem;
+    width: 70%;
+    background-color: #282c34;
+    min-width: 600px;
+}
+
+.search-results {
+    display: flex;
+    font-size: 1rem;
+    flex-direction: column;
+}
+
+.results-table {
+    table-layout: fixed;
+    /* This makes the table respect column widths */
+    width: 100%;
+}
+
+.results-table th,
+.results-table td {
+    padding: 0.1rem 1rem;
+    border-bottom: 0.1px solid #ffffff;
+    text-align: left;
+
+    /* Prevent text overflow and keep single line */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/*  title column */
+.results-table th:nth-child(1),
+.results-table td:nth-child(1) {
+    width: 1%;
+
+}
+
+.results-table th:nth-child(2),
+.results-table td:nth-child(2) {
+    width: 10%;
+}
+
+.results-table th:nth-child(3),
+.results-table td:nth-child(3) {
+    width: 20%;
+}
+
+.results-table th:nth-child(4),
+.results-table td:nth-child(4) {
+    width: 2%;
+}
+
+.results-table th:nth-child(5),
+.results-table td:nth-child(5) {
+    width: 2%;
+}
+
+.results-table th:nth-child(6),
+.results-table td:nth-child(6) {
+    width: 2%;
+}
+
+.results-table th {
+    background-color: #be9903;
+    font-weight: bold;
+}
+
+.results-table tr:hover {
+    background-color: #be990362;
+}
+
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.pagination button {
+    background-color: #282c34;
+    color: rgb(226, 190, 45);
+    border: 2px solid rgb(226, 190, 45);
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: Impact, sans-serif;
+}
+
+
+.pagination button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pagination span {
+    color: rgb(226, 190, 45);
+    font-family: Impact, sans-serif;
+    font-size: 1.2rem;
 }

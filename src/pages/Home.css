@@ -3,48 +3,10 @@
 .top-item-title {
     color: rgb(226, 190, 45);
     display: flex;
+    min-width: 200px;
     padding: 1rem 2rem;
     font-size: 3rem;
     font-family: Impact, sans-serif;
     box-shadow: 0 10px 2000px #003399;
     border-bottom: 1px solid #ffcc00;
-}
-
-.item-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    /* 5 side by side */
-    gap: 10px;
-    /* space between boxes */
-    padding: 20px;
-}
-
-.item-card {
-    background: rgb(226, 190, 45);
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 1px;
-    text-align: center;
-    box-shadow: 0 2px 6px rgb(255, 255, 255);
-}
-
-.ranking {
-    color: #003399;
-    display: center;
-    text-align: center;
-    font-size: 3rem;
-    padding: 0rem;
-    font-family: Impact, sans-serif;
-}
-
-.item-title {
-    color: #003399;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 1rem 1rem;
-    font-size: 2rem;
-    font-family: Impact, sans-serif;
-    min-height: 12vh;
-    box-shadow: 0 10px 20px #ffffff;
 }
