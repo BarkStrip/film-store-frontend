@@ -40,7 +40,7 @@ export default function CustomerDetailsButton({ customer }) {
                             onClick={() => setIsOpen(false)}
                             className="rent-button"
                         >
-                            Rent Out
+                            Rent
                         </button>
                     </div>
                 </div>

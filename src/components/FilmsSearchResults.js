@@ -3,7 +3,7 @@ import FilmDetailsButton from "./FilmDetailsButton";
 
 export default function FilmsSearchResults({ data }) {
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 50;
+    const itemsPerPage = 100;
 
     const totalPages = Math.floor((data.length + itemsPerPage - 1) / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;

@@ -102,6 +102,12 @@
     align-items: flex-start;
     z-index: 1000;
     padding: 2rem 0;
+    overflow-y: auto;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    hyphens: auto;
+
 }
 
 .inner-overlay {
