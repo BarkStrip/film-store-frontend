@@ -8,6 +8,7 @@ export default function FilmDetailsButton({ film }) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
+    const [currentFilm, setCurrentFilm] = useState(film);
 
     const handleRentOut = () => {
         setShowRentInput(true);
@@ -40,6 +41,12 @@ export default function FilmDetailsButton({ film }) {
                 setLoading(false);
                 if (data.success) {
                     setSuccess("Rental created successfully!");
+                    // Update local film state
+                    setCurrentFilm({
+                        ...currentFilm,
+                        available_inventory: Math.max(0, (currentFilm.available_inventory || 0) - 1),
+                        rented: (currentFilm.rented || 0) + 1
+                    });
                     setTimeout(() => {
                         setCustomerId("");
                         setShowRentInput(false);
@@ -73,27 +80,27 @@ export default function FilmDetailsButton({ film }) {
             {isOpen && (
                 <div className="outer-overlay">
                     <div className="inner-overlay">
-                        <h3>{film.title}</h3>
+                        <h3>{currentFilm.title}</h3>
                         <div style={{ textAlign: "left" }}>
-                            <p><strong>Description:</strong> {film.description}</p>
-                            {film.category && <p><strong>Category:</strong> {film.category}</p>}
-                            <p><strong>Rating: </strong>{film.rating}</p>
-                            <p><strong>Release Year: </strong>{film.release_year}</p>
-                            <p><strong>Length: </strong>{film.length} mins</p>
-                            <p><strong>Special Features: </strong>{film.special_features}</p>
-                            <p><strong>Film ID: </strong>{film.film_id} </p>
+                            <p><strong>Description:</strong> {currentFilm.description}</p>
+                            {currentFilm.category && <p><strong>Category:</strong> {currentFilm.category}</p>}
+                            <p><strong>Rating: </strong>{currentFilm.rating}</p>
+                            <p><strong>Release Year: </strong>{currentFilm.release_year}</p>
+                            <p><strong>Length: </strong>{currentFilm.length} mins</p>
+                            <p><strong>Special Features: </strong>{currentFilm.special_features}</p>
+                            <p><strong>Film ID: </strong>{currentFilm.film_id} </p>
                             <p><strong>Available Inventory: </strong>
                                 <span style={{
-                                    color: film.available_inventory > 0 ? "green" : "red",
+                                    color: currentFilm.available_inventory > 0 ? "green" : "red",
                                     fontWeight: "bold"
                                 }}>
-                                    {film.available_inventory || 0} copies available
+                                    {currentFilm.available_inventory || 0} copies available
                                 </span>
                             </p>
-                            <p><strong>Rented Out: </strong>{film.rented} </p>
-                            <p><strong>Rental Duration: </strong>{film.rental_duration} days</p>
-                            <p><strong>Rental Rate: </strong>${film.rental_rate} </p>
-                            <p><strong>Replacement Cost: </strong>${film.replacement_cost} </p>
+                            <p><strong>Rented Out: </strong>{currentFilm.rented} </p>
+                            <p><strong>Rental Duration: </strong>{currentFilm.rental_duration} days</p>
+                            <p><strong>Rental Rate: </strong>${currentFilm.rental_rate} </p>
+                            <p><strong>Replacement Cost: </strong>${currentFilm.replacement_cost} </p>
                         </div>
 
 
@@ -117,7 +124,7 @@ export default function FilmDetailsButton({ film }) {
             {showRentInput && (
                 <div className="outer-overlay">
                     <div className="inner-overlay">
-                        <h3>Rent Out: {film.title}</h3>
+                        <h3>Rent Out: {currentFilm.title}</h3>
                         <div style={{ marginTop: "1rem", marginBottom: "1rem" }}>
                             <label htmlFor="customerId" style={{ display: "block", marginBottom: "0.5rem" }}>
                                 <strong>Customer ID:</strong>
