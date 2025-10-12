@@ -10,6 +10,8 @@ export default function CustomerDetailsButton({ customer }) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
+    const [showReturnConfirm, setShowReturnConfirm] = useState(false);
+    const [rentalToReturn, setRentalToReturn] = useState(null);
 
     const fetchRentals = useCallback(() => {
         setLoadingRentals(true);
@@ -91,18 +93,23 @@ export default function CustomerDetailsButton({ customer }) {
         setSuccess("");
     };
 
-    const handleReturn = (rentalId) => {
-        if (!window.confirm("Are you sure you want to mark this rental as returned?")) {
-            return;
-        }
+    const handleReturn = (rental) => {
+        setRentalToReturn(rental);
+        setShowReturnConfirm(true);
+    };
 
-        fetch(`http://localhost:3001/api/rentals/${rentalId}/return`, {
+    const confirmReturn = () => {
+        if (!rentalToReturn) return;
+
+        fetch(`http://localhost:3001/api/rentals/${rentalToReturn.rental_id}/return`, {
             method: "PUT",
         })
             .then((res) => res.json())
             .then((data) => {
                 if (data.success) {
                     fetchRentals(); // Refresh rental history
+                    setShowReturnConfirm(false);
+                    setRentalToReturn(null);
                 } else {
                     alert(data.error || "Failed to return rental");
                 }
@@ -110,6 +117,11 @@ export default function CustomerDetailsButton({ customer }) {
             .catch((err) => {
                 alert("Error returning rental: " + err.message);
             });
+    };
+
+    const cancelReturn = () => {
+        setShowReturnConfirm(false);
+        setRentalToReturn(null);
     };
 
     return (
@@ -162,7 +174,7 @@ export default function CustomerDetailsButton({ customer }) {
                                                     <td style={{ padding: "0.5rem", textAlign: "center" }}>
                                                         {rental.status === "Currently Rented" && (
                                                             <button
-                                                                onClick={() => handleReturn(rental.rental_id)}
+                                                                onClick={() => handleReturn(rental)}
                                                                 style={{
                                                                     padding: "0.25rem 0.5rem",
                                                                     fontSize: "0.8rem",
@@ -248,6 +260,61 @@ export default function CustomerDetailsButton({ customer }) {
                             disabled={loading}
                         >
                             {loading ? "Processing..." : "Submit"}
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {showReturnConfirm && rentalToReturn && (
+                <div className="outer-overlay">
+                    <div className="inner-overlay" style={{ maxWidth: "500px" }}>
+                        <h3>Confirm Return</h3>
+                        <div style={{ marginTop: "1.5rem", marginBottom: "1.5rem", textAlign: "center" }}>
+                            <p style={{ fontSize: "1.1rem", marginBottom: "1rem" }}>
+                                Are you sure you want to mark this rental as returned?
+                            </p>
+                            <div style={{
+                                backgroundColor: "#f8f9fa",
+                                padding: "1rem",
+                                borderRadius: "5px",
+                                border: "1px solid #dee2e6"
+                            }}>
+                                <p style={{ margin: "0.5rem 0" }}>
+                                    <strong>Film:</strong> {rentalToReturn.title}
+                                </p>
+                                <p style={{ margin: "0.5rem 0" }}>
+                                    <strong>Rental Date:</strong> {formatDate(rentalToReturn.rental_date)}
+                                </p>
+                                <p style={{ margin: "0.5rem 0" }}>
+                                    <strong>Customer:</strong> {customer.first_name} {customer.last_name}
+                                </p>
+                            </div>
+                        </div>
+
+                        <button
+                            onClick={cancelReturn}
+                            className="close-button"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            onClick={confirmReturn}
+                            style={{
+                                marginTop: "1rem",
+                                marginLeft: "1rem",
+                                padding: "0.5rem 1rem",
+                                borderRadius: "5px",
+                                border: "none",
+                                cursor: "pointer",
+                                backgroundColor: "#28a745",
+                                color: "white",
+                                transition: "background-color 0.2s ease",
+                                fontWeight: "bold"
+                            }}
+                            onMouseOver={(e) => e.target.style.backgroundColor = "#218838"}
+                            onMouseOut={(e) => e.target.style.backgroundColor = "#28a745"}
+                        >
+                            Confirm Return
                         </button>
                     </div>
                 </div>
