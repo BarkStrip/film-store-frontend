@@ -91,6 +91,27 @@ export default function CustomerDetailsButton({ customer }) {
         setSuccess("");
     };
 
+    const handleReturn = (rentalId) => {
+        if (!window.confirm("Are you sure you want to mark this rental as returned?")) {
+            return;
+        }
+
+        fetch(`http://localhost:3001/api/rentals/${rentalId}/return`, {
+            method: "PUT",
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.success) {
+                    fetchRentals(); // Refresh rental history
+                } else {
+                    alert(data.error || "Failed to return rental");
+                }
+            })
+            .catch((err) => {
+                alert("Error returning rental: " + err.message);
+            });
+    };
+
     return (
         <>
             <button
@@ -128,6 +149,7 @@ export default function CustomerDetailsButton({ customer }) {
                                                 <th style={{ textAlign: "left", padding: "0.5rem" }}>Rental Date</th>
                                                 <th style={{ textAlign: "left", padding: "0.5rem" }}>Return Date</th>
                                                 <th style={{ textAlign: "left", padding: "0.5rem" }}>Status</th>
+                                                <th style={{ textAlign: "center", padding: "0.5rem" }}>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -137,6 +159,24 @@ export default function CustomerDetailsButton({ customer }) {
                                                     <td style={{ padding: "0.5rem" }}>{formatDate(rental.rental_date)}</td>
                                                     <td style={{ padding: "0.5rem" }}>{formatDate(rental.return_date)}</td>
                                                     <td style={{ padding: "0.5rem" }}>{rental.status}</td>
+                                                    <td style={{ padding: "0.5rem", textAlign: "center" }}>
+                                                        {rental.status === "Currently Rented" && (
+                                                            <button
+                                                                onClick={() => handleReturn(rental.rental_id)}
+                                                                style={{
+                                                                    padding: "0.25rem 0.5rem",
+                                                                    fontSize: "0.8rem",
+                                                                    backgroundColor: "#28a745",
+                                                                    color: "white",
+                                                                    border: "none",
+                                                                    borderRadius: "3px",
+                                                                    cursor: "pointer"
+                                                                }}
+                                                            >
+                                                                Return
+                                                            </button>
+                                                        )}
+                                                    </td>
                                                 </tr>
                                             ))}
                                         </tbody>
