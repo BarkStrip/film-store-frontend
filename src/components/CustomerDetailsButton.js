@@ -1,31 +1,94 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import "./Components.css"
 
 export default function CustomerDetailsButton({ customer }) {
     const [isOpen, setIsOpen] = useState(false);
     const [rentals, setRentals] = useState([]);
     const [loadingRentals, setLoadingRentals] = useState(false);
+    const [showRentInput, setShowRentInput] = useState(false);
+    const [filmId, setFilmId] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
+
+    const fetchRentals = useCallback(() => {
+        setLoadingRentals(true);
+        fetch(`http://localhost:3001/api/customers/${customer.customer_id}/rentals`)
+            .then((res) => res.json())
+            .then((data) => {
+                setRentals(data);
+                setLoadingRentals(false);
+            })
+            .catch((err) => {
+                console.error("Error fetching rentals:", err);
+                setLoadingRentals(false);
+            });
+    }, [customer.customer_id]);
 
     useEffect(() => {
         if (isOpen) {
-            setLoadingRentals(true);
-            fetch(`http://localhost:3001/api/customers/${customer.customer_id}/rentals`)
-                .then((res) => res.json())
-                .then((data) => {
-                    setRentals(data);
-                    setLoadingRentals(false);
-                })
-                .catch((err) => {
-                    console.error("Error fetching rentals:", err);
-                    setLoadingRentals(false);
-                });
+            fetchRentals();
         }
-    }, [isOpen, customer.customer_id]);
+    }, [isOpen, fetchRentals]);
 
     const formatDate = (dateString) => {
         if (!dateString) return "N/A";
         const date = new Date(dateString);
         return date.toLocaleDateString();
+    };
+
+    const handleRent = () => {
+        setShowRentInput(true);
+        setError("");
+        setSuccess("");
+    };
+
+    const handleSubmitRental = () => {
+        if (!filmId.trim()) {
+            setError("Please enter a film ID");
+            return;
+        }
+
+        setLoading(true);
+        setError("");
+        setSuccess("");
+
+        fetch("http://localhost:3001/api/rentals", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                customer_id: customer.customer_id,
+                film_id: filmId,
+            }),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                setLoading(false);
+                if (data.success) {
+                    setSuccess("Rental created successfully!");
+                    fetchRentals(); // Refresh rental history
+                    setTimeout(() => {
+                        setFilmId("");
+                        setShowRentInput(false);
+                        setSuccess("");
+                    }, 1500);
+                } else {
+                    setError(data.error || "Failed to create rental");
+                }
+            })
+            .catch((err) => {
+                setLoading(false);
+                setError("Error creating rental: " + err.message);
+            });
+    };
+
+    const handleCancelRental = () => {
+        setFilmId("");
+        setShowRentInput(false);
+        setError("");
+        setSuccess("");
     };
 
     return (
@@ -91,15 +154,64 @@ export default function CustomerDetailsButton({ customer }) {
                             Close
                         </button>
                         <button
-                            onClick={() => setIsOpen(false)}
+                            onClick={handleRent}
                             className="rent-button"
                         >
                             Rent
                         </button>
                     </div>
                 </div>
-            )
-            }
+            )}
+
+            {showRentInput && (
+                <div className="outer-overlay">
+                    <div className="inner-overlay">
+                        <h3>Rent to: {customer.first_name} {customer.last_name}</h3>
+                        <div style={{ marginTop: "1rem", marginBottom: "1rem" }}>
+                            <label htmlFor="filmId" style={{ display: "block", marginBottom: "0.5rem" }}>
+                                <strong>Film ID:</strong>
+                            </label>
+                            <input
+                                id="filmId"
+                                type="text"
+                                value={filmId}
+                                onChange={(e) => setFilmId(e.target.value)}
+                                placeholder="Enter film ID"
+                                disabled={loading}
+                                style={{
+                                    width: "100%",
+                                    padding: "0.5rem",
+                                    fontSize: "1rem",
+                                    borderRadius: "5px",
+                                    border: "1px solid #ccc"
+                                }}
+                            />
+                        </div>
+
+                        {error && (
+                            <p style={{ color: "red", marginBottom: "1rem" }}>{error}</p>
+                        )}
+                        {success && (
+                            <p style={{ color: "green", marginBottom: "1rem" }}>{success}</p>
+                        )}
+
+                        <button
+                            onClick={handleCancelRental}
+                            className="close-button"
+                            disabled={loading}
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            onClick={handleSubmitRental}
+                            className="rent-button"
+                            disabled={loading}
+                        >
+                            {loading ? "Processing..." : "Submit"}
+                        </button>
+                    </div>
+                </div>
+            )}
         </>
     );
 }

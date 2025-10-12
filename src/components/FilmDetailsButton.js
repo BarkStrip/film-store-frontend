@@ -5,17 +5,55 @@ export default function FilmDetailsButton({ film }) {
     const [isOpen, setIsOpen] = useState(false);
     const [showRentInput, setShowRentInput] = useState(false);
     const [customerId, setCustomerId] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
 
     const handleRentOut = () => {
         setShowRentInput(true);
+        setError("");
+        setSuccess("");
     };
 
     const handleSubmitRental = () => {
-        console.log("Renting film:", film.film_id, "to customer:", customerId);
-        // TODO: Add backend API call here
-        setCustomerId("");
-        setShowRentInput(false);
-        setIsOpen(false);
+        if (!customerId.trim()) {
+            setError("Please enter a customer ID");
+            return;
+        }
+
+        setLoading(true);
+        setError("");
+        setSuccess("");
+
+        fetch("http://localhost:3001/api/rentals", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                customer_id: customerId,
+                film_id: film.film_id,
+            }),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                setLoading(false);
+                if (data.success) {
+                    setSuccess("Rental created successfully!");
+                    setTimeout(() => {
+                        setCustomerId("");
+                        setShowRentInput(false);
+                        setIsOpen(false);
+                        setSuccess("");
+                    }, 1500);
+                } else {
+                    setError(data.error || "Failed to create rental");
+                }
+            })
+            .catch((err) => {
+                setLoading(false);
+                setError("Error creating rental: " + err.message);
+            });
     };
 
     const handleCancelRental = () => {
@@ -82,6 +120,7 @@ export default function FilmDetailsButton({ film }) {
                                 value={customerId}
                                 onChange={(e) => setCustomerId(e.target.value)}
                                 placeholder="Enter customer ID"
+                                disabled={loading}
                                 style={{
                                     width: "100%",
                                     padding: "0.5rem",
@@ -92,17 +131,26 @@ export default function FilmDetailsButton({ film }) {
                             />
                         </div>
 
+                        {error && (
+                            <p style={{ color: "red", marginBottom: "1rem" }}>{error}</p>
+                        )}
+                        {success && (
+                            <p style={{ color: "green", marginBottom: "1rem" }}>{success}</p>
+                        )}
+
                         <button
                             onClick={handleCancelRental}
                             className="close-button"
+                            disabled={loading}
                         >
                             Cancel
                         </button>
                         <button
                             onClick={handleSubmitRental}
                             className="rent-button"
+                            disabled={loading}
                         >
-                            Submit
+                            {loading ? "Processing..." : "Submit"}
                         </button>
                     </div>
                 </div>
