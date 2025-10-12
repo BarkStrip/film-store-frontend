@@ -16,6 +16,8 @@ export default function CustomerDetailsButton({ customer }) {
     const [editFirstName, setEditFirstName] = useState("");
     const [editLastName, setEditLastName] = useState("");
     const [editEmail, setEditEmail] = useState("");
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [deleting, setDeleting] = useState(false);
 
     const fetchRentals = useCallback(() => {
         setLoadingRentals(true);
@@ -192,6 +194,36 @@ export default function CustomerDetailsButton({ customer }) {
         setSuccess("");
     };
 
+    const handleDelete = () => {
+        setShowDeleteConfirm(true);
+    };
+
+    const confirmDelete = () => {
+        setDeleting(true);
+        fetch(`http://localhost:3001/api/customers/${customer.customer_id}`, {
+            method: "DELETE",
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                setDeleting(false);
+                if (data.success) {
+                    alert("Customer deleted successfully!");
+                    setIsOpen(false);
+                    window.location.reload();
+                } else {
+                    alert(data.error || "Failed to delete customer");
+                }
+            })
+            .catch((err) => {
+                setDeleting(false);
+                alert("Error deleting customer: " + err.message);
+            });
+    };
+
+    const cancelDelete = () => {
+        setShowDeleteConfirm(false);
+    };
+
     return (
         <>
             <button
@@ -205,13 +237,13 @@ export default function CustomerDetailsButton({ customer }) {
                 <div className="outer-overlay">
                     <div className="inner-overlay">
                         <div style={{ textAlign: "left" }}>
+
                             <p><strong>Customer ID:</strong> {customer.customer_id}</p>
 
                             {!isEditing ? (
                                 <>
                                     <p><strong>Name: </strong>{customer.first_name} {customer.last_name}</p>
                                     <p><strong>Email: </strong>{customer.email} </p>
-
                                 </>
                             ) : (
                                 <div style={{ marginTop: "1rem", marginBottom: "1rem" }}>
@@ -292,7 +324,9 @@ export default function CustomerDetailsButton({ customer }) {
                             ) : (
                                 <p><strong>Activity Status: </strong> Inactive  </p>
                             )}
+
                             <button onClick={handleEdit} className="edit-button">Edit</button>
+                            <button onClick={handleDelete} className="delete-button" style={{ marginLeft: "1rem", backgroundColor: "#dc3545", color: "white" }}>Delete</button>
 
                             <hr style={{ margin: "1rem 0", border: "1px solid #ccc" }} />
 
@@ -346,18 +380,8 @@ export default function CustomerDetailsButton({ customer }) {
                             )}
                         </div>
 
-                        <button
-                            onClick={() => setIsOpen(false)}
-                            className="close-button"
-                        >
-                            Close
-                        </button>
-                        <button
-                            onClick={handleRent}
-                            className="rent-button"
-                        >
-                            Rent
-                        </button>
+                        <button onClick={() => setIsOpen(false)} className="close-button">Close</button>
+                        <button onClick={handleRent} className="rent-button">Rent</button>
                     </div>
                 </div>
             )}
@@ -463,6 +487,60 @@ export default function CustomerDetailsButton({ customer }) {
                         >
                             Confirm Return
                         </button>
+                    </div>
+                </div>
+            )}
+
+            {showDeleteConfirm && (
+                <div className="outer-overlay">
+                    <div className="inner-overlay" style={{ maxWidth: "500px" }}>
+                        <h3>Confirm Deletion</h3>
+                        <p style={{ marginTop: "1.5rem", marginBottom: "1.5rem", fontSize: "1.1rem", textAlign: "center" }}>
+                            Are you sure you want to permanently delete this customer? This action cannot be undone.
+                        </p>
+                        <div style={{
+                            backgroundColor: "#f8d7da",
+                            color: "#721c24",
+                            padding: "1rem",
+                            borderRadius: "5px",
+                            border: "1px solid #f5c6cb",
+                            marginBottom: "1.5rem"
+                        }}>
+                            <p style={{ margin: "0.5rem 0" }}>
+                                Customer: {customer.first_name} {customer.last_name}
+                            </p>
+                            <p style={{ margin: "0.5rem 0" }}>
+                                ID: {customer.customer_id}
+                            </p>
+                        </div>
+                        <div style={{ display: "flex", justifyContent: "center" }}>
+                            <button
+                                onClick={cancelDelete}
+                                className="close-button"
+                                disabled={deleting}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={confirmDelete}
+                                style={{
+                                    marginLeft: "1rem",
+                                    padding: "0.5rem 1rem",
+                                    borderRadius: "5px",
+                                    border: "none",
+                                    cursor: "pointer",
+                                    backgroundColor: "#dc3545",
+                                    color: "white",
+                                    transition: "background-color 0.2s ease",
+                                    fontWeight: "bold"
+                                }}
+                                disabled={deleting}
+                                onMouseOver={(e) => e.target.style.backgroundColor = "#c82333"}
+                                onMouseOut={(e) => e.target.style.backgroundColor = "#dc3545"}
+                            >
+                                {deleting ? "Deleting..." : "Delete Permanently"}
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}
