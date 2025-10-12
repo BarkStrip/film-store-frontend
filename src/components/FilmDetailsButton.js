@@ -3,6 +3,25 @@ import "./Components.css"
 
 export default function FilmDetailsButton({ film }) {
     const [isOpen, setIsOpen] = useState(false);
+    const [showRentInput, setShowRentInput] = useState(false);
+    const [customerId, setCustomerId] = useState("");
+
+    const handleRentOut = () => {
+        setShowRentInput(true);
+    };
+
+    const handleSubmitRental = () => {
+        console.log("Renting film:", film.film_id, "to customer:", customerId);
+        // TODO: Add backend API call here
+        setCustomerId("");
+        setShowRentInput(false);
+        setIsOpen(false);
+    };
+
+    const handleCancelRental = () => {
+        setCustomerId("");
+        setShowRentInput(false);
+    };
 
     return (
         <>
@@ -40,15 +59,54 @@ export default function FilmDetailsButton({ film }) {
                             Close
                         </button>
                         <button
-                            onClick={() => setIsOpen(false)}
+                            onClick={handleRentOut}
                             className="rent-button"
                         >
                             Rent Out
                         </button>
                     </div>
                 </div>
-            )
-            }
+            )}
+
+            {showRentInput && (
+                <div className="outer-overlay">
+                    <div className="inner-overlay">
+                        <h3>Rent Out: {film.title}</h3>
+                        <div style={{ marginTop: "1rem", marginBottom: "1rem" }}>
+                            <label htmlFor="customerId" style={{ display: "block", marginBottom: "0.5rem" }}>
+                                <strong>Customer ID:</strong>
+                            </label>
+                            <input
+                                id="customerId"
+                                type="text"
+                                value={customerId}
+                                onChange={(e) => setCustomerId(e.target.value)}
+                                placeholder="Enter customer ID"
+                                style={{
+                                    width: "100%",
+                                    padding: "0.5rem",
+                                    fontSize: "1rem",
+                                    borderRadius: "5px",
+                                    border: "1px solid #ccc"
+                                }}
+                            />
+                        </div>
+
+                        <button
+                            onClick={handleCancelRental}
+                            className="close-button"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            onClick={handleSubmitRental}
+                            className="rent-button"
+                        >
+                            Submit
+                        </button>
+                    </div>
+                </div>
+            )}
         </>
     );
 }
