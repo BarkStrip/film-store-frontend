@@ -12,6 +12,10 @@ export default function CustomerDetailsButton({ customer }) {
     const [success, setSuccess] = useState("");
     const [showReturnConfirm, setShowReturnConfirm] = useState(false);
     const [rentalToReturn, setRentalToReturn] = useState(null);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editFirstName, setEditFirstName] = useState("");
+    const [editLastName, setEditLastName] = useState("");
+    const [editEmail, setEditEmail] = useState("");
 
     const fetchRentals = useCallback(() => {
         setLoadingRentals(true);
@@ -124,6 +128,70 @@ export default function CustomerDetailsButton({ customer }) {
         setRentalToReturn(null);
     };
 
+    const handleEdit = () => {
+        setEditFirstName(customer.first_name);
+        setEditLastName(customer.last_name);
+        setEditEmail(customer.email);
+        setIsEditing(true);
+        setError("");
+        setSuccess("");
+    };
+
+    const handleSaveEdit = () => {
+        if (!editFirstName.trim() || !editLastName.trim() || !editEmail.trim()) {
+            setError("All fields are required");
+            return;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(editEmail)) {
+            setError("Please enter a valid email address");
+            return;
+        }
+
+        setLoading(true);
+        setError("");
+        setSuccess("");
+
+        fetch(`http://localhost:3001/api/customers/${customer.customer_id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                first_name: editFirstName,
+                last_name: editLastName,
+                email: editEmail,
+            }),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                setLoading(false);
+                if (data.success) {
+                    setSuccess("Customer updated successfully!");
+                    customer.first_name = editFirstName;
+                    customer.last_name = editLastName;
+                    customer.email = editEmail;
+                    setTimeout(() => {
+                        setIsEditing(false);
+                        setSuccess("");
+                    }, 1500);
+                } else {
+                    setError(data.error || "Failed to update customer");
+                }
+            })
+            .catch((err) => {
+                setLoading(false);
+                setError("Error updating customer: " + err.message);
+            });
+    };
+
+    const handleCancelEdit = () => {
+        setIsEditing(false);
+        setError("");
+        setSuccess("");
+    };
+
     return (
         <>
             <button
@@ -138,14 +206,93 @@ export default function CustomerDetailsButton({ customer }) {
                     <div className="inner-overlay">
                         <div style={{ textAlign: "left" }}>
                             <p><strong>Customer ID:</strong> {customer.customer_id}</p>
-                            <p><strong>Name: </strong>{customer.first_name} {customer.last_name}</p>
-                            <p><strong>Email: </strong>{customer.email} </p>
+
+                            {!isEditing ? (
+                                <>
+                                    <p><strong>Name: </strong>{customer.first_name} {customer.last_name}</p>
+                                    <p><strong>Email: </strong>{customer.email} </p>
+
+                                </>
+                            ) : (
+                                <div style={{ marginTop: "1rem", marginBottom: "1rem" }}>
+                                    <label htmlFor="editFirstName" style={{ display: "block", marginBottom: "0.5rem" }}>
+                                        <strong>First Name:</strong>
+                                    </label>
+                                    <input
+                                        id="editFirstName"
+                                        type="text"
+                                        value={editFirstName}
+                                        onChange={(e) => setEditFirstName(e.target.value)}
+                                        placeholder="Enter first name"
+                                        disabled={loading}
+                                        style={{
+                                            width: "100%",
+                                            padding: "0.5rem",
+                                            fontSize: "1rem",
+                                            borderRadius: "5px",
+                                            border: "1px solid #ccc",
+                                            marginBottom: "1rem"
+                                        }}
+                                    />
+
+                                    <label htmlFor="editLastName" style={{ display: "block", marginBottom: "0.5rem" }}>
+                                        <strong>Last Name:</strong>
+                                    </label>
+                                    <input
+                                        id="editLastName"
+                                        type="text"
+                                        value={editLastName}
+                                        onChange={(e) => setEditLastName(e.target.value)}
+                                        placeholder="Enter last name"
+                                        disabled={loading}
+                                        style={{
+                                            width: "100%",
+                                            padding: "0.5rem",
+                                            fontSize: "1rem",
+                                            borderRadius: "5px",
+                                            border: "1px solid #ccc",
+                                            marginBottom: "1rem"
+                                        }}
+                                    />
+
+                                    <label htmlFor="editEmail" style={{ display: "block", marginBottom: "0.5rem" }}>
+                                        <strong>Email:</strong>
+                                    </label>
+                                    <input
+                                        id="editEmail"
+                                        type="email"
+                                        value={editEmail}
+                                        onChange={(e) => setEditEmail(e.target.value)}
+                                        placeholder="Enter email address"
+                                        disabled={loading}
+                                        style={{
+                                            width: "100%",
+                                            padding: "0.5rem",
+                                            fontSize: "1rem",
+                                            borderRadius: "5px",
+                                            border: "1px solid #ccc"
+                                        }}
+                                    />
+                                    <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "1rem" }}>
+                                        <button onClick={handleCancelEdit} className="cancel-button" disabled={loading}>Cancel</button>
+                                        <button onClick={handleSaveEdit} className="save-button" disabled={loading} style={{ marginLeft: "1rem" }}>{loading ? "Saving..." : "Save"}</button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {error && (
+                                <p style={{ color: "red", marginBottom: "1rem" }}>{error}</p>
+                            )}
+                            {success && (
+                                <p style={{ color: "green", marginBottom: "1rem" }}>{success}</p>
+                            )}
 
                             {customer.active == 1 ? (
                                 <p><strong>Activity Status: </strong> Active  </p>
                             ) : (
                                 <p><strong>Activity Status: </strong> Inactive  </p>
                             )}
+                            <button onClick={handleEdit} className="edit-button">Edit</button>
 
                             <hr style={{ margin: "1rem 0", border: "1px solid #ccc" }} />
 
