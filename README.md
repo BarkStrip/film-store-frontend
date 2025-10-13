@@ -68,3 +68,8 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+For full-stack development, run both servers concurrently:
+1. Terminal 1: `cd backend && source venv/bin/activate && python app.py`
+2. Terminal 2: `cd frontend && npm start

@@ -94,10 +94,9 @@ export default function FilmDetailsButton({ film }) {
                                     color: currentFilm.available_inventory > 0 ? "green" : "red",
                                     fontWeight: "bold"
                                 }}>
-                                    {currentFilm.available_inventory || 0} copies available
+                                    {currentFilm.available_inventory || 0} / {(currentFilm.available_inventory || 0) + (currentFilm.rented || 0)} copies
                                 </span>
                             </p>
-                            <p><strong>Rented Out: </strong>{currentFilm.rented} </p>
                             <p><strong>Rental Duration: </strong>{currentFilm.rental_duration} days</p>
                             <p><strong>Rental Rate: </strong>${currentFilm.rental_rate} </p>
                             <p><strong>Replacement Cost: </strong>${currentFilm.replacement_cost} </p>
