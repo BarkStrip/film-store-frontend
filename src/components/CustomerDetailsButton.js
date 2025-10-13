@@ -525,15 +525,8 @@ export default function CustomerDetailsButton({ customer }) {
                                 onClick={confirmDelete}
                                 style={{
                                     marginLeft: "1rem",
-                                    padding: "0.5rem 1rem",
-                                    borderRadius: "5px",
-                                    border: "none",
-                                    cursor: "pointer",
-                                    backgroundColor: "#dc3545",
-                                    color: "white",
-                                    transition: "background-color 0.2s ease",
-                                    fontWeight: "bold"
                                 }}
+                                className="delete-button"
                                 disabled={deleting}
                                 onMouseOver={(e) => e.target.style.backgroundColor = "#c82333"}
                                 onMouseOut={(e) => e.target.style.backgroundColor = "#dc3545"}
