@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./Components.css"
 
-export default function FilmDetailsButton({ film }) {
+export default function FilmDetailsButton({ film, buttonText = "View Details", buttonStyle = {} }) {
     const [isOpen, setIsOpen] = useState(false);
     const [showRentInput, setShowRentInput] = useState(false);
     const [customerId, setCustomerId] = useState("");
@@ -73,8 +73,9 @@ export default function FilmDetailsButton({ film }) {
             <button
                 onClick={() => setIsOpen(true)}
                 className="view-details-button"
+                style={buttonStyle}
             >
-                View Details
+                {buttonText}
             </button >
 
             {isOpen && (

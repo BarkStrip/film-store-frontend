@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import "./Components.css"
+import FilmDetailsButton from "./FilmDetailsButton";
 
 export default function CustomerDetailsButton({ customer }) {
     const [isOpen, setIsOpen] = useState(false);
@@ -348,7 +349,19 @@ export default function CustomerDetailsButton({ customer }) {
                                         <tbody>
                                             {rentals.map((rental) => (
                                                 <tr key={rental.rental_id} style={{ borderBottom: "1px solid #eee" }}>
-                                                    <td style={{ padding: "0.5rem" }}>{rental.title}</td>
+                                                    <td style={{ padding: "0.5rem" }}>
+                                                        <FilmDetailsButton
+                                                            film={rental}
+                                                            buttonText={rental.title}
+                                                            buttonStyle={{
+                                                                backgroundColor: "transparent",
+                                                                color: "#007bff",
+                                                                padding: "0",
+                                                                textDecoration: "underline",
+                                                                fontSize: "0.9rem"
+                                                            }}
+                                                        />
+                                                    </td>
                                                     <td style={{ padding: "0.5rem" }}>{formatDate(rental.rental_date)}</td>
                                                     <td style={{ padding: "0.5rem" }}>{formatDate(rental.return_date)}</td>
                                                     <td style={{ padding: "0.5rem" }}>{rental.status}</td>
