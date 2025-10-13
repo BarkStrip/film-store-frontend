@@ -162,13 +162,13 @@
     border-radius: 5px;
     border: none;
     cursor: pointer;
-    background-color: #856b02;
+    background-color: #fbdc61;
     color: white;
     transition: background-color 0.2s ease;
 }
 
 .rent-button:hover {
-    background-color: #675202;
+    background-color: #e6c94f;
 }
 
 
