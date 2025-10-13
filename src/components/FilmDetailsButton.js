@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./Components.css"
 
-export default function FilmDetailsButton({ film, buttonText = "View Details", buttonStyle = {} }) {
+export default function FilmDetailsButton({ film }) {
     const [isOpen, setIsOpen] = useState(false);
     const [showRentInput, setShowRentInput] = useState(false);
     const [customerId, setCustomerId] = useState("");
@@ -73,9 +73,8 @@ export default function FilmDetailsButton({ film, buttonText = "View Details", b
             <button
                 onClick={() => setIsOpen(true)}
                 className="view-details-button"
-                style={buttonStyle}
             >
-                {buttonText}
+                View Details
             </button >
 
             {isOpen && (
@@ -98,6 +97,7 @@ export default function FilmDetailsButton({ film, buttonText = "View Details", b
                                     {currentFilm.available_inventory || 0} / {(currentFilm.available_inventory || 0) + (currentFilm.rented || 0)} copies
                                 </span>
                             </p>
+                            <p><strong>Times Rented: </strong>{currentFilm.rented} </p>
                             <p><strong>Rental Duration: </strong>{currentFilm.rental_duration} days</p>
                             <p><strong>Rental Rate: </strong>${currentFilm.rental_rate} </p>
                             <p><strong>Replacement Cost: </strong>${currentFilm.replacement_cost} </p>
